@@ -1,0 +1,1 @@
+export { default as ReactDropzone } from './ReactDropzone.component';

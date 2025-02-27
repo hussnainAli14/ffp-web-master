@@ -1,0 +1,1 @@
+export { default as ListAffiliatePage } from './List.component';

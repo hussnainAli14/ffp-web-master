@@ -1,0 +1,1 @@
+export { default as EmptyPage } from './EmptyPage.component';

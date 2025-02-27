@@ -1,0 +1,1 @@
+export { default as ProductsSearchPage } from './Products.component';

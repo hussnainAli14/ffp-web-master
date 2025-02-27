@@ -1,0 +1,1 @@
+export { default as CategoriesSlider } from './CategoriesSlider.component';

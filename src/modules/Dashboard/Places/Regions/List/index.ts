@@ -1,0 +1,1 @@
+export { default as ListRegionPage } from './List.component';

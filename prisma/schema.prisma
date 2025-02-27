@@ -1,0 +1,387 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model categories {
+  id                      String                    @id(map: "category_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                    String                    @db.VarChar(255)
+  image                   String
+  sequence                Int?                      @default(autoincrement())
+  is_hidden               Boolean?                  @default(false)
+  created_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  deleted_at              DateTime?                 @db.Timestamp(6)
+  products                products[]
+  sub_categories          sub_categories[]
+  user_service_categories user_service_categories[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model cities {
+  id           BigInt    @id @default(autoincrement())
+  name         String    @db.VarChar(255)
+  state_id     BigInt
+  state_code   String    @db.VarChar(255)
+  country_id   BigInt
+  country_code String    @db.Char(2)
+  latitude     Decimal   @db.Decimal(10, 8)
+  longitude    Decimal   @db.Decimal(11, 8)
+  created_at   DateTime  @default(dbgenerated("'2014-01-01 12:01:01'::timestamp without time zone")) @db.Timestamp(6)
+  updated_at   DateTime  @default(now()) @db.Timestamp(6)
+  flag         Int       @default(1) @db.SmallInt
+  wikiDataId   String?   @db.VarChar(255)
+  countries    countries @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  states       states    @relation(fields: [state_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([country_id])
+  @@index([state_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model countries {
+  id              BigInt      @id @default(autoincrement())
+  name            String      @db.VarChar(100)
+  iso3            String?     @db.Char(3)
+  numeric_code    String?     @db.Char(3)
+  iso2            String?     @db.Char(2)
+  phonecode       String?     @db.VarChar(255)
+  capital         String?     @db.VarChar(255)
+  currency        String?     @db.VarChar(255)
+  currency_name   String?     @db.VarChar(255)
+  currency_symbol String?     @db.VarChar(255)
+  tld             String?     @db.VarChar(255)
+  native          String?     @db.VarChar(255)
+  region          String?     @db.VarChar(255)
+  region_id       BigInt?
+  subregion       String?     @db.VarChar(255)
+  subregion_id    BigInt?
+  nationality     String?     @db.VarChar(255)
+  timezones       String?
+  translations    String?
+  latitude        Decimal?    @db.Decimal(10, 8)
+  longitude       Decimal?    @db.Decimal(11, 8)
+  emoji           String?     @db.VarChar(191)
+  emojiU          String?     @db.VarChar(191)
+  created_at      DateTime?   @db.Timestamp(6)
+  updated_at      DateTime    @default(now()) @db.Timestamp(6)
+  flag            Int         @default(1) @db.SmallInt
+  wikiDataId      String?     @db.VarChar(255)
+  cities          cities[]
+  regions         regions?    @relation(fields: [region_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subregions      subregions? @relation(fields: [subregion_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  states          states[]
+
+  @@index([region_id])
+  @@index([subregion_id])
+}
+
+model place_cities {
+  id                BigInt              @id @default(autoincrement())
+  region_id         BigInt
+  country_id        BigInt
+  name              String              @db.VarChar(255)
+  image             String?
+  created_at        DateTime            @default(now()) @db.Timestamp(6)
+  updated_at        DateTime            @default(now()) @db.Timestamp(6)
+  deleted_at        DateTime?           @db.Timestamp(6)
+  is_show_on_home   Boolean             @default(false)
+  place_countries   place_countries     @relation(fields: [country_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  place_regions     place_regions       @relation(fields: [region_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  place_home_cities place_home_cities[]
+
+  @@index([country_id], map: "idx_place_cities_country_id")
+  @@index([region_id], map: "idx_place_cities_region_id")
+}
+
+model place_countries {
+  id                BigInt              @id @default(autoincrement())
+  region_id         BigInt
+  name              String              @db.VarChar(255)
+  created_at        DateTime            @default(now()) @db.Timestamp(6)
+  updated_at        DateTime            @default(now()) @db.Timestamp(6)
+  deleted_at        DateTime?           @db.Timestamp(6)
+  place_cities      place_cities[]
+  place_regions     place_regions       @relation(fields: [region_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  place_home_cities place_home_cities[]
+
+  @@index([region_id], map: "idx_place_countries_region_id")
+}
+
+model place_home_cities {
+  id              BigInt          @id @default(autoincrement())
+  region_id       BigInt
+  country_id      BigInt
+  city_id         BigInt
+  display_order   Int             @unique
+  place_cities    place_cities    @relation(fields: [city_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  place_countries place_countries @relation(fields: [country_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  place_regions   place_regions   @relation(fields: [region_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([city_id], map: "idx_place_home_cities_city_id")
+  @@index([country_id], map: "idx_place_home_cities_country_id")
+  @@index([region_id], map: "idx_place_home_cities_region_id")
+}
+
+model place_regions {
+  id                BigInt              @id @default(autoincrement())
+  name              String              @db.VarChar(255)
+  created_at        DateTime            @default(now()) @db.Timestamp(6)
+  updated_at        DateTime            @default(now()) @db.Timestamp(6)
+  deleted_at        DateTime?           @db.Timestamp(6)
+  place_cities      place_cities[]
+  place_countries   place_countries[]
+  place_home_cities place_home_cities[]
+}
+
+model product_content_list_items {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content_id       String           @db.Uuid
+  list_item        String
+  created_at       DateTime?        @default(now()) @db.Timestamp(6)
+  list_index       Int?
+  product_contents product_contents @relation(fields: [content_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model product_contents {
+  id                         String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_id                 String                       @db.Uuid
+  content_type               String
+  title                      String
+  details                    String?
+  created_at                 DateTime?                    @default(now()) @db.Timestamp(6)
+  content_index              Int?
+  product_content_list_items product_content_list_items[]
+  products                   products                     @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model product_images {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_id  String    @db.Uuid
+  image_url   String
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  image_index Int?
+  products    products  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model product_operational_hours {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_id String    @db.Uuid
+  day        Int
+  is_open    Boolean   @default(false)
+  start_hour DateTime? @db.Time(6)
+  end_hour   DateTime? @db.Time(6)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  products   products  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model product_quick_details {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_id   String    @db.Uuid
+  detail_type  String
+  detail_value String
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  detail_index Int?
+  products     products  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model product_tags {
+  product_id String   @db.Uuid
+  tag_id     String   @db.Uuid
+  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tags       tags     @relation(fields: [tag_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([product_id, tag_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model products {
+  id                        String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  parent_product_id         String?                     @unique @db.Uuid
+  provider_id               String                      @db.Uuid
+  category_id               String                      @db.Uuid
+  sub_category_id           String                      @db.Uuid
+  name                      String
+  summary                   String
+  country_id                BigInt
+  city_id                   BigInt
+  video_url                 String?
+  starting_price            Decimal?                    @db.Decimal(10, 2)
+  status                    String
+  created_at                DateTime?                   @default(now()) @db.Timestamp(6)
+  updated_at                DateTime?                   @default(now()) @db.Timestamp(6)
+  deleted_at                DateTime?                   @db.Timestamp(6)
+  country_name              String
+  city_name                 String
+  cta_type                  String
+  cta_url                   String
+  region_id                 BigInt
+  region_name               String?
+  currency                  String?                     @db.VarChar(100)
+  product_contents          product_contents[]
+  product_images            product_images[]
+  product_operational_hours product_operational_hours[]
+  product_quick_details     product_quick_details[]
+  product_tags              product_tags[]
+  categories                categories                  @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  products                  products?                   @relation("productsToproducts", fields: [parent_product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  other_products            products?                   @relation("productsToproducts")
+  users                     users                       @relation(fields: [provider_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sub_categories            sub_categories              @relation(fields: [sub_category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model regions {
+  id           BigInt       @id @default(autoincrement())
+  name         String       @db.VarChar(100)
+  translations String?
+  created_at   DateTime?    @db.Timestamp(6)
+  updated_at   DateTime     @default(now()) @db.Timestamp(6)
+  flag         Int          @default(1) @db.SmallInt
+  wikiDataId   String?      @db.VarChar(255)
+  countries    countries[]
+  subregions   subregions[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model states {
+  id           BigInt    @id @default(autoincrement())
+  name         String    @db.VarChar(255)
+  country_id   BigInt
+  country_code String    @db.Char(2)
+  fips_code    String?   @db.VarChar(255)
+  iso2         String?   @db.VarChar(255)
+  type         String?   @db.VarChar(191)
+  latitude     Decimal?  @db.Decimal(10, 8)
+  longitude    Decimal?  @db.Decimal(11, 8)
+  created_at   DateTime? @db.Timestamp(6)
+  updated_at   DateTime  @default(now()) @db.Timestamp(6)
+  flag         Int       @default(1) @db.SmallInt
+  wikiDataId   String?   @db.VarChar(255)
+  cities       cities[]
+  countries    countries @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([country_id])
+}
+
+model sub_categories {
+  id          String      @id(map: "sub_category_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String      @db.VarChar(255)
+  category_id String?     @db.Uuid
+  image       String      @db.VarChar(255)
+  created_at  DateTime?   @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?   @default(now()) @db.Timestamp(6)
+  deleted_at  DateTime?   @db.Timestamp(6)
+  products    products[]
+  categories  categories? @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sub_category_category_id_fkey")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model subregions {
+  id           BigInt      @id @default(autoincrement())
+  name         String      @db.VarChar(100)
+  translations String?
+  region_id    BigInt
+  created_at   DateTime?   @db.Timestamp(6)
+  updated_at   DateTime    @default(now()) @db.Timestamp(6)
+  flag         Int         @default(1) @db.SmallInt
+  wikiDataId   String?     @db.VarChar(255)
+  countries    countries[]
+  regions      regions     @relation(fields: [region_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([region_id])
+}
+
+model subscribers {
+  id         Int       @id @default(autoincrement())
+  email      String    @unique @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model tags {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String         @unique @db.VarChar(255)
+  created_at   DateTime?      @default(now()) @db.Timestamp(6)
+  updated_at   DateTime?      @default(now()) @db.Timestamp(6)
+  deleted_at   DateTime?      @db.Timestamp(6)
+  description  String?
+  product_tags product_tags[]
+}
+
+model user_businesses {
+  id                        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                   String    @db.Uuid
+  operation_years           String?   @db.VarChar(255)
+  website                   String?   @db.VarChar(255)
+  instagram                 String?   @db.VarChar(255)
+  facebook                  String?   @db.VarChar(255)
+  tiktok                    String?   @db.VarChar(255)
+  youtube                   String?   @db.VarChar(255)
+  snapchat                  String?   @db.VarChar(255)
+  preferred_niche           String?   @db.VarChar(255)
+  registration_number       String?   @db.VarChar(100)
+  certification_or_licenses String?
+  created_at                DateTime? @default(now()) @db.Timestamp(6)
+  updated_at                DateTime? @default(now()) @db.Timestamp(6)
+  deleted_at                DateTime? @db.Timestamp(6)
+  users                     users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_business_user")
+}
+
+model user_service_categories {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_service_id String        @db.Uuid
+  category_id     String        @db.Uuid
+  name            String        @db.VarChar(255)
+  image           String?
+  sequence        Int?
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  categories      categories    @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_category")
+  user_services   user_services @relation(fields: [user_service_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_service_user")
+}
+
+model user_services {
+  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                 String                    @db.Uuid
+  description             String?
+  target_audience         String?
+  service_location        String?                   @db.VarChar(255)
+  created_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  deleted_at              DateTime?                 @db.Timestamp(6)
+  user_service_categories user_service_categories[]
+  users                   users                     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_service_user")
+}
+
+model users {
+  id                           String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  full_name                    String            @db.VarChar(255)
+  email                        String            @unique @db.VarChar(255)
+  country_id                   Int
+  country_name                 String?           @db.VarChar(255)
+  city_id                      Int
+  city_name                    String?           @db.VarChar(255)
+  type                         String            @db.VarChar(100)
+  affiliate_type               String?           @db.VarChar(100)
+  created_at                   DateTime?         @default(now()) @db.Timestamp(6)
+  updated_at                   DateTime?         @default(now()) @db.Timestamp(6)
+  deleted_at                   DateTime?         @db.Timestamp(6)
+  password                     String?           @db.VarChar
+  phone_number                 String?           @db.VarChar
+  business_name                String?           @db.VarChar(255)
+  is_approved                  Boolean?          @default(false)
+  password_reset_token         String?
+  password_reset_token_expires DateTime?         @db.Timestamptz(6)
+  phone_country                String?           @db.VarChar
+  phone_code                   String?           @db.VarChar
+  products                     products[]
+  user_businesses              user_businesses[]
+  user_services                user_services[]
+}

@@ -1,0 +1,1 @@
+export { default as AddTagPage } from './Add.component';

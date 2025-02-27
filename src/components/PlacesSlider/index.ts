@@ -1,0 +1,1 @@
+export { default as PlacesSlider } from './PlacesSlider.component';

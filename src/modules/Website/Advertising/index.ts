@@ -1,0 +1,1 @@
+export { default as AdvertisingPage } from './Advertising.component';

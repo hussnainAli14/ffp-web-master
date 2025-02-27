@@ -1,0 +1,1 @@
+export { default as OperationalHours } from './OperationalHours.component';

@@ -1,0 +1,1 @@
+export { default as ReactDatePicker } from './ReactDatePicker.component';

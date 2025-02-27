@@ -1,0 +1,1 @@
+export { default as ReactCheckBox } from './ReactCheckBox.component';

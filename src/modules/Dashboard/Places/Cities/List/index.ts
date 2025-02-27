@@ -1,0 +1,1 @@
+export { default as ListCityPage } from './List.component';

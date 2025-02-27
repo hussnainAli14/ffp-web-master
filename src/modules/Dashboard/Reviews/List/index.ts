@@ -1,0 +1,1 @@
+export { default as ListReviewsPage } from './List.component';

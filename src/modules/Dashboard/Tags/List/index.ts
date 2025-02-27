@@ -1,0 +1,1 @@
+export { default as ListTagPage } from './List.component';

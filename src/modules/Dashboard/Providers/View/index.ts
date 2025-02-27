@@ -1,0 +1,1 @@
+export { default as ViewProviderPage } from './View.component';

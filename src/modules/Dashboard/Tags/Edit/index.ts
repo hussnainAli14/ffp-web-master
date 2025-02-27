@@ -1,0 +1,1 @@
+export { default as EditTagPage } from './Edit.component';

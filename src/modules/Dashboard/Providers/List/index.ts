@@ -1,0 +1,1 @@
+export { default as ListProviderPage } from './List.component';

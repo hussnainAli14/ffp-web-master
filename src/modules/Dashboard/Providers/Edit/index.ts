@@ -1,0 +1,1 @@
+export { default as EditProviderPage } from './Edit.component';

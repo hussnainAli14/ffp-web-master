@@ -1,0 +1,1 @@
+export { default as AddCityPage } from './Add.component';

@@ -1,0 +1,36 @@
+import { PlaceCityProps, PlaceCountryProps, ProductListProps, RowAction, Setter } from '@ffp-web/app/index.types';
+
+export type UseList = {
+  listProduct: ProductListProps[],
+  setListProduct: Setter<ProductListProps[]>,
+  isLoadingList: boolean,
+  setIsLoadingList: Setter<boolean>,
+  selectedProduct?: ProductListProps,
+  setSelectedProduct: Setter<ProductListProps | undefined>,
+  openModalDelete: boolean,
+  setOpenModalDelete: Setter<boolean>,
+  handleDelete: RowAction<ProductListProps>,
+  onDelete: VoidFunction,
+  openModalApprove: boolean,
+  setOpenModalApprove: Setter<boolean>,
+  handleApprove: RowAction<ProductListProps>,
+  onApprove: VoidFunction,
+  countries: PlaceCountryProps[],
+  setCountries: Setter<PlaceCountryProps[]>,
+  listingCountry: number[],
+  setListingCountry: Setter<number[]>,
+  cities: PlaceCityProps[],
+  setCities: Setter<PlaceCityProps[]>,
+  listingCity: number[],
+  setListingCity: Setter<number[]>,
+  isOpenFilterCountryListing: boolean,
+  setIsOpenFilterCountryListing: Setter<boolean>,
+  isopenFilterCityListing: boolean,
+  setIsopenFilterCityListing: Setter<boolean>,
+  handleCloseListingCountry: (item?: number[]) => void,
+  handleCloseListingCity: (item?: number[]) => void,
+}
+export type ColumnProps = {
+  handleDelete: RowAction<ProductListProps>,
+  handleApprove: RowAction<ProductListProps>,
+};

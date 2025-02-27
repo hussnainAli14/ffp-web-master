@@ -1,0 +1,1 @@
+export { default as SectionInformation } from './SectionInformation.component';

@@ -1,0 +1,1 @@
+export { default as AddProviderPage } from './Add.component';

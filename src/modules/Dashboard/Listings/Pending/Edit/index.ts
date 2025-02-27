@@ -1,0 +1,1 @@
+export { default as EditPendingListingPage } from './Edit.component';

@@ -1,0 +1,1 @@
+export { default as Phonecode } from './Phonecode.component';

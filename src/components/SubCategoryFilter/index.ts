@@ -1,0 +1,1 @@
+export { default as SubCategoryFilter } from './SubCategoryFilter.component';

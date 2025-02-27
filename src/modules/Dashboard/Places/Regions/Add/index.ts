@@ -1,0 +1,1 @@
+export { default as AddRegionPage } from './Add.component';

@@ -1,0 +1,1 @@
+export { default as EditCategoryPage } from './Edit.component';

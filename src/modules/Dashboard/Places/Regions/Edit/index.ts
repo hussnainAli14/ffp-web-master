@@ -1,0 +1,1 @@
+export { default as EditRegionPage } from './Edit.component';

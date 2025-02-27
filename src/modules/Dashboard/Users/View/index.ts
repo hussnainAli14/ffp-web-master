@@ -1,0 +1,1 @@
+export { default as ViewUserPage } from './View.component';

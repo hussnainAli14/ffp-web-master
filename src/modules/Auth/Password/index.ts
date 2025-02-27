@@ -1,0 +1,1 @@
+export { default as PasswordPage } from './Password.component';

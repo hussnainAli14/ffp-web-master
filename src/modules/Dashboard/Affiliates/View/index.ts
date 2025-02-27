@@ -1,0 +1,1 @@
+export { default as ViewAffiliatePage } from './View.component';

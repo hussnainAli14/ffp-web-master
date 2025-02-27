@@ -1,0 +1,1 @@
+export { default as ListCategoryPage } from './List.component';

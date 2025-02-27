@@ -1,0 +1,1 @@
+export { default as ListActiveListingPage } from './List.component';
