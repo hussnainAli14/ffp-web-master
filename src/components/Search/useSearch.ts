@@ -4,7 +4,7 @@ import { ChangeEvent, KeyboardEvent, useState } from 'react';
 
 import { getSearchDetails } from '@ffp-web/lib/product/data';
 
-import { UseSearch } from './Search.types';
+import { Suggestion, UseSearch } from './Search.types';
 
 
 const useSearch = (): UseSearch => {
@@ -13,7 +13,7 @@ const useSearch = (): UseSearch => {
   const pathname = usePathname();
   const router = useRouter();
   const [querySearch, setQuerySearch] = useState<string>('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
 
   const fetchSuggestions = async (value: string) => {
     if (value.length > 2) {
