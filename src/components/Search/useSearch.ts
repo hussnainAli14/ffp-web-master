@@ -13,15 +13,16 @@ const useSearch = (): UseSearch => {
   const pathname = usePathname();
   const router = useRouter();
   const [querySearch, setQuerySearch] = useState<string>('');
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const fetchSuggestions = async (value: string) => {
     if (value.length > 2) {
       try {
         const { data } = await getSearchDetails(value);
         setSuggestions(data);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error('Error fetching search details:', error);
+        // Handle the error appropriately
         setSuggestions([]);
       }
     } else {

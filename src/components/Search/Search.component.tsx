@@ -26,7 +26,7 @@ const Search = (props: Props) => {
       />
       {suggestions.length > 0 && (
       <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-md mt-1 text-primary-black">
-        {suggestions.map((suggestion: any, index: number) => (
+        {suggestions.map((suggestion: { id: string; suggestion: string; type: string; detail?: string; suggestion_2?: string; suggestion_3?: string }, index: number) => (
         <Link
           key={index}
           href={

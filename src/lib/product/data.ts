@@ -926,13 +926,13 @@ export async function getProductListCard(params: ProductListCardParams): Promise
 export async function getSearchDetails(searchQuery: string) {
   const client = await pool.connect();
   try {
-    let activity = searchQuery;
-    let location = '';
-    if (searchQuery.toLowerCase().includes(' in ')) {
-      const parts = searchQuery.split(/ in /i);
-      activity = parts[0].trim();
-      location = parts[1].trim();
-    }
+    // let activity = searchQuery;
+    // let location = '';
+    // if (searchQuery.toLowerCase().includes(' in ')) {
+    //   const parts = searchQuery.split(/ in /i);
+    //   activity = parts[0].trim();
+    //   location = parts[1].trim();
+    // }
 
     const sql = `
       SELECT 
@@ -1004,14 +1004,14 @@ export async function getSearchDetails(searchQuery: string) {
     const result = await client.query(sql, params);
 
     return { data: result.rows };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
-    console.error('Error executing query:', err);
     return { data: [], error: 'Error executing query' };
   } finally {
     client.release();
   }
 }
-
+    // Removed console statement
 export async function fetchFilterData() {
   const client = await pool.connect();
   try {
@@ -1042,6 +1042,7 @@ export async function fetchFilterData() {
       countries: countriesResult.rows,
     };
     
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     throw new Error('Error fetching filters');
   } finally {
