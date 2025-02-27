@@ -1,11 +1,10 @@
-"use client";
+'use client';
 
-import { LuSearch } from "react-icons/lu";
+import Link from 'next/link';
+import { LuSearch } from 'react-icons/lu';
 
-import { Props } from "./Search.types";
-import useSearch from "./useSearch";
-import Link from "next/link";
-import React from "react";
+import { Props } from './Search.types';
+import useSearch from './useSearch';
 
 const Search = (props: Props) => {
   const { id } = props;
@@ -17,7 +16,7 @@ const Search = (props: Props) => {
       <LuSearch className="text-gray-400 text-lg" />
       </div>
       <input
-      id={id ?? "search"}
+      id={id ?? 'search'}
       type="text"
       className="flex flex-grow text-primary-black text-base font-normal rounded-full pl-10 pr-4 h-11 focus:outline-primary-btn"
       placeholder="Find places & things to do"

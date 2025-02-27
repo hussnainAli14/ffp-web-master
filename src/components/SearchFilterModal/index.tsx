@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { LoadingSpinner } from "../LoadingSpinner";
+import React, { useEffect, useState } from 'react';
+
+import { LoadingSpinner } from '../LoadingSpinner';
 
 interface FilterOption {
   id: number;
@@ -49,7 +50,7 @@ const SearchFilterModal: React.FC<FilterModalProps> = ({
       if (searchData.categories && searchData.categories.length >0) {
         const cat = searchData.categories.map((category) => ({
           ...category,
-          type: "categories",
+          type: 'categories',
         }));
         setCategories(cat);
       }
@@ -57,7 +58,7 @@ const SearchFilterModal: React.FC<FilterModalProps> = ({
       if (searchData.cities && searchData.cities.length > 0) {
         const cit = searchData.cities.map((city) => ({
           ...city,
-          type: "city",
+          type: 'city',
         }));
         setCities(cit);
       }
@@ -72,21 +73,21 @@ const SearchFilterModal: React.FC<FilterModalProps> = ({
     if (isOpen) {
       asyncfetchFilterData();
     }
-  }, [isOpen]);
+  }, [isOpen, searchData.categories, searchData.cities]);
 
   const handleCheckboxChange = (
     id: number,
-    type: "city" | "categories" | "country"
+    type: 'city' | 'categories' | 'country'
   ) => {
-    if (type === "city") {
+    if (type === 'city') {
       setSelectedCities((prev) =>
         prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
       );
-    } else if (type === "country") {
+    } else if (type === 'country') {
       setSelectedCountries((prev) =>
         prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
       );
-    } else if (type === "category") {
+    } else if (type === 'category') {
       setSelectedCategories((prev) =>
         prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
       );
@@ -143,7 +144,7 @@ const SearchFilterModal: React.FC<FilterModalProps> = ({
                       type="checkbox"
                       checked={selectedCategories.includes(cat.categoryId)}
                       onChange={() =>
-                        handleCheckboxChange(cat.categoryId, "category")
+                        handleCheckboxChange(cat.categoryId, 'category')
                       }
                       className="mr-2"
                     />
@@ -185,7 +186,7 @@ const SearchFilterModal: React.FC<FilterModalProps> = ({
                         type="checkbox"
                         checked={selectedCities.includes(city.cityId)}
                         onChange={() =>
-                          handleCheckboxChange(city.cityId, "city")
+                          handleCheckboxChange(city.cityId, 'city')
                         }
                         className="mr-2"
                       />

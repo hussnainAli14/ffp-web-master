@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { isEmpty } from "lodash";
-import { useState } from "react";
+import { isEmpty } from 'lodash';
+import { useState } from 'react';
 
+import { ProductListCardProps } from '@ffp-web/app/index.types';
 import {
   LoadingSpinner,
   ProductCard,
   ProductCardMobile,
   SectionTitle,
-} from "@ffp-web/components";
-import { EmptyPage } from "@ffp-web/modules/Website";
-import SearchFilterModal from "@ffp-web/components/SearchFilterModal";
-import { ProductListCardProps } from "@ffp-web/app/index.types";
+} from '@ffp-web/components';
+import SearchFilterModal from '@ffp-web/components/SearchFilterModal';
+import { EmptyPage } from '@ffp-web/modules/Website';
 
-import useCity from "./useCity";
+import useCity from './useCity';
 
 const CityPage = () => {
   const {
@@ -82,7 +82,7 @@ const CityPage = () => {
       filteredProducts = products;
     }
 
-    if (type === "rating") {
+    if (type === 'rating') {
       setRating(Number(e.target.value));
       filteredPopularProducts = filteredPopularProducts.filter(
         (product) => product.reviewScore >= e.target.value
@@ -92,7 +92,7 @@ const CityPage = () => {
         (product) => product.reviewScore >= e.target.value
       );
     }
-    if (type === "startingPrice") {
+    if (type === 'startingPrice') {
       setStartingPrice(Number(e.target.value));
       filteredPopularProducts = filteredPopularProducts.filter(
         (product) => product.startingPrice >= e.target.value
@@ -120,10 +120,10 @@ const CityPage = () => {
       <div
         className="px-4 md:px-20 xl:px-28 mt-8 md:mt-16"
         style={{
-          display: "flex",
-          flexDirection: "row-reverse",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'row-reverse',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         <SearchFilterModal
@@ -140,13 +140,13 @@ const CityPage = () => {
         <button
           className="ml-2 bg-gray-100 px-3 py-1 rounded-full border hover:bg-gray-200 flex items-center"
           onClick={() => setIsFilterModalOpen(true)}
-          style={{ height: "40px" }}
+          style={{ height: '40px' }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
             height="12"
-            style={{ paddingRight: "5px" }}
+            style={{ paddingRight: '5px' }}
           >
             <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32l432 0c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9 320 448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6l0-79.1L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z" />
           </svg>
@@ -156,7 +156,7 @@ const CityPage = () => {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex flex-col">
                 <select
-                onChange={(e) => applyOtherFilters("rating", e)}
+                onChange={(e) => applyOtherFilters('rating', e)}
                 value={rating}
                 className="border rounded px-3 py-2"
                 >
@@ -173,7 +173,7 @@ const CityPage = () => {
               <select
                 id="startingPrice"
                 value={startingPrice}
-                onChange={(e) => applyOtherFilters("startingPrice", e)}
+                onChange={(e) => applyOtherFilters('startingPrice', e)}
                 className="border rounded px-3 py-2"
               >
                 <option value="0" selected>

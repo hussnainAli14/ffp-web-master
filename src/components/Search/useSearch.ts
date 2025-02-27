@@ -1,9 +1,10 @@
+import { debounce } from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
 
-import { UseSearch } from './Search.types';
 import { getSearchDetails } from '@ffp-web/lib/product/data';
-import { debounce } from 'lodash';
+
+import { UseSearch } from './Search.types';
 
 
 const useSearch = (): UseSearch => {
