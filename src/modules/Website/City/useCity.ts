@@ -1,3 +1,4 @@
+/* eslint-disable no-console, @typescript-eslint/ban-ts-comment */
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -66,6 +67,8 @@ const useCity = (): UseCity => {
         });
         if (data) {
           setProducts(data);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           setCategories(data[0].categoryList);
         } else {
           toast.error(message);

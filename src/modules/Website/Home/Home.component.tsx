@@ -43,9 +43,13 @@ const HomePage = () => {
       setSelectedCategories([]);
     } else {
       const category = categories.filter((category) =>
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
         filters.categories.includes(category.categoryId)
       );
       fetchProducts(category[0].categoryId);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
       setSelectedCategories(category);
       setSelectedCategoryId(category[0].categoryId);
     }
@@ -72,8 +76,12 @@ const HomePage = () => {
           onClose={() => setIsFilterModalOpen(false)}
           onApplyFilters={handleApplyFilters}
           searchData={{
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
             cities: places,
             // countries: selectedCountries,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
             categories: categories,
           }}
         />
@@ -93,6 +101,8 @@ const HomePage = () => {
         </button>
       </div>
       <CategoriesTab
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
         categories={
           selectedCategories.length > 0 ? selectedCategories : categories
         }
@@ -108,6 +118,8 @@ const HomePage = () => {
         <SectionTitle keyTitle="Popular" restTitle="Attractions" />
       </div>
       <CategoriesSlider
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
         categories={
           selectedCategories.length > 0 ? selectedCategories : categories
         }

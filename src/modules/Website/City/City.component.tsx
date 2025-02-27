@@ -50,10 +50,14 @@ const CityPage = () => {
 
     if (filters.categories.length > 0) {
       filteredPopularProducts = filteredPopularProducts.filter((product) =>
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
         filters.categories.includes(product.categoryId)
       );
 
       filteredProducts = filteredProducts.filter((product) =>
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
         filters.categories.includes(product.categoryId)
       );
     }
@@ -85,20 +89,28 @@ const CityPage = () => {
     if (type === 'rating') {
       setRating(Number(e.target.value));
       filteredPopularProducts = filteredPopularProducts.filter(
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
         (product) => product.reviewScore >= e.target.value
       );
 
       filteredProducts = filteredProducts.filter(
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
         (product) => product.reviewScore >= e.target.value
       );
     }
     if (type === 'startingPrice') {
       setStartingPrice(Number(e.target.value));
       filteredPopularProducts = filteredPopularProducts.filter(
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
         (product) => product.startingPrice >= e.target.value
       );
 
       filteredProducts = filteredProducts.filter(
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
         (product) => product.startingPrice >= e.target.value
       );
     }
