@@ -20,10 +20,12 @@ const useSearch = (): UseSearch => {
       try {
         const { data } = await getSearchDetails(value);
         setSuggestions(data);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         // Handle the error appropriately
         setSuggestions([]);
+        // Log the error or handle it appropriately
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        console.log('Error fetching suggestions', error);
       }
     } else {
       setSuggestions([]);

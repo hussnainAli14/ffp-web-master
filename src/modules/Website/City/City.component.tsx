@@ -1,3 +1,5 @@
+/* eslint-disable no-console, @typescript-eslint/ban-ts-comment */
+
 'use client';
 
 import { isEmpty } from 'lodash';
@@ -50,14 +52,14 @@ const CityPage = () => {
 
     if (filters.categories.length > 0) {
       filteredPopularProducts = filteredPopularProducts.filter((product) =>
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         filters.categories.includes(product.categoryId)
       );
 
       filteredProducts = filteredProducts.filter((product) =>
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         filters.categories.includes(product.categoryId)
       );
     }
@@ -89,30 +91,49 @@ const CityPage = () => {
     if (type === 'rating') {
       setRating(Number(e.target.value));
       filteredPopularProducts = filteredPopularProducts.filter(
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         (product) => product.reviewScore >= e.target.value
       );
 
       filteredProducts = filteredProducts.filter(
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         (product) => product.reviewScore >= e.target.value
       );
     }
     if (type === 'startingPrice') {
       setStartingPrice(Number(e.target.value));
-      filteredPopularProducts = filteredPopularProducts.filter(
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-        (product) => product.startingPrice >= e.target.value
-      );
 
-      filteredProducts = filteredProducts.filter(
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      filteredPopularProducts = filteredPopularProducts.sort((a, b) => {
+        if (e.target.value === '1') {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-        (product) => product.startingPrice >= e.target.value
-      );
+          return b.startingPrice - a.startingPrice;
+        }else if(e.target.value === '3'){
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return b.reviewScore - a.reviewScore;
+        }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return a.startingPrice - b.startingPrice;
+      });
+
+      filteredProducts = filteredProducts.sort((a, b) => {
+        if (e.target.value === '1') {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return b.startingPrice - a.startingPrice;
+        }else if(e.target.value === '3'){
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return b.reviewScore - a.reviewScore;
+        }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return a.startingPrice - b.startingPrice;
+      });
     }
 
     setSelectedPopularProducts(filteredPopularProducts);
@@ -150,6 +171,7 @@ const CityPage = () => {
           }}
         />
         <button
+          type="button"
           className="ml-2 bg-gray-100 px-3 py-1 rounded-full border hover:bg-gray-200 flex items-center"
           onClick={() => setIsFilterModalOpen(true)}
           style={{ height: '40px' }}
@@ -165,38 +187,37 @@ const CityPage = () => {
           Filters
         </button>
         <div className="">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-col">
-                <select
+          <div className="flex flex-row md:flex-row gap-4">
+            {/* <div className="flex flex-col">
+              <select
+                title="Rating"
+                id="rating"
                 onChange={(e) => applyOtherFilters('rating', e)}
                 value={rating}
                 className="border rounded px-3 py-2"
-                >
-                <option value="0" selected>Rating</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                </select>
-            </div>
-            <div className="flex flex-col">
+              >
+                <option value="0">Rating</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+              </select>
+            </div> */}
+            <div className="flex flex-row items-center">
+              <label htmlFor="startingPrice" className="text-sm font-semibold mr-5">
+                Sort
+              </label>
               <select
+                title="Sort"
                 id="startingPrice"
                 value={startingPrice}
                 onChange={(e) => applyOtherFilters('startingPrice', e)}
                 className="border rounded px-3 py-2"
               >
-                <option value="0" selected>
-                  Starting Price
-                </option>
-                <option value="0">0</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
-                <option value="500">500</option>
-                <option value="1000">1000</option>
+                {/* <option value="0">Sort</option> */}
+                <option value="0">Recommended</option>
+                <option value="1">Highest to Lowest</option>
+                <option value="2">Lowest to Highest</option>
+                <option value="3">Rating</option>
               </select>
             </div>
           </div>
@@ -222,9 +243,13 @@ const CityPage = () => {
         </div>
       ) : (
         <div className="mt-4 py-4 px-4 md:hidden flex flex-col gap-6">
-          {popularProducts.map((item) => (
-            <ProductCardMobile key={item.productId} product={item} />
-          ))}
+          {filterApplied
+            ? selectedPopularProducts.map((item) => (
+                <ProductCardMobile key={item.productId} product={item} />
+              ))
+            : popularProducts.map((item) => (
+                <ProductCardMobile key={item.productId} product={item} />
+              ))}
         </div>
       )}
 
@@ -278,9 +303,13 @@ const CityPage = () => {
         </div>
       ) : (
         <div className="mt-4 py-4 px-4 md:hidden flex flex-col gap-6">
-          {products.map((item) => (
-            <ProductCardMobile key={item.productId} product={item} />
-          ))}
+          {filterApplied
+            ? selectedProducts.map((item) => (
+                <ProductCardMobile key={item.productId} product={item} />
+              ))
+            : products.map((item) => (
+                <ProductCardMobile key={item.productId} product={item} />
+              ))}
         </div>
       )}
       {products.length >= pagination.limit && (
